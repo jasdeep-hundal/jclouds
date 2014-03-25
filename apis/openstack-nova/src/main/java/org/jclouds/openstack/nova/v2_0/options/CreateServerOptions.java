@@ -98,6 +98,27 @@ public class CreateServerOptions implements MapBinder {
 
    }
 
+   public static class BlockDevice{
+      @Named("volume_size")
+      String volumeSize = "";
+      @Named("volume_id")
+      String volumeId;
+      @Named("delete_on_termination")
+      int deleteOnTermination = 0;
+      @Named("device_name")
+      String deviceName;
+
+      public BlockDevice(String volumeId, String deviceName){
+         this(volumeId, deviceName, true);
+      }
+
+      public BlockDevice(String volumeId, String deviceName, boolean deleteWhenInstanceTerminated){
+         this.volumeId = volumeId;
+         this.deviceName = deviceName;
+         this.deleteOnTermination = deleteWhenInstanceTerminated ? 1 : 0;
+      }
+   }
+
    private String keyName;
    private String adminPass;
    private Set<String> securityGroupNames = ImmutableSet.of();
@@ -109,6 +130,7 @@ public class CreateServerOptions implements MapBinder {
    private Set<Network> novaNetworks = ImmutableSet.of();
    private String availabilityZone;
    private boolean configDrive;
+   private List<BlockDevice> blockDeviceMapping = Lists.newArrayList();
 
    @Override
    public boolean equals(Object object) {
@@ -151,6 +173,8 @@ public class CreateServerOptions implements MapBinder {
          toString.add("networks", networks);
       toString.add("availability_zone", availabilityZone == null ? null : availabilityZone);
       toString.add("configDrive", configDrive);
+      if (!blockDeviceMapping.isEmpty())
+         toString.add("blockDeviceMapping", blockDeviceMapping);
       return toString;
    }
 
@@ -177,6 +201,8 @@ public class CreateServerOptions implements MapBinder {
       Set<Map<String, String>> networks;
       @Named("config_drive")
       String configDrive;
+      @Named("block_device_mapping")
+      List<BlockDevice> blockDeviceMapping;
 
       private ServerRequest(String name, String imageRef, String flavorRef) {
          this.name = name;
@@ -236,6 +262,10 @@ public class CreateServerOptions implements MapBinder {
          for (String network : networks) {
             server.networks.add(ImmutableMap.of("uuid", network));
          }
+      }
+
+      if (!blockDeviceMapping.isEmpty()) {
+         server.blockDeviceMapping = blockDeviceMapping;
       }
 
       return bindToRequest(request, ImmutableMap.of("server", server));
@@ -459,6 +489,21 @@ public class CreateServerOptions implements MapBinder {
       return networks(ImmutableSet.copyOf(networks));
    }
 
+   /**
+    * Block volumes that should be attached to the instance at boot time
+    */
+   public List<BlockDevice> getBlockDeviceMapping() {
+      return blockDeviceMapping;
+   }
+
+   /**
+    * @see #getBlockDeviceMapping
+    */
+   public CreateServerOptions blockDeviceMapping(List<BlockDevice> blockDeviceMapping) {
+      this.blockDeviceMapping = blockDeviceMapping;
+      return this;
+   }
+
    public static class Builder {
 
       /**
@@ -544,6 +589,14 @@ public class CreateServerOptions implements MapBinder {
       public static CreateServerOptions availabilityZone(String availabilityZone) {
          CreateServerOptions options = new CreateServerOptions();
          return options.availabilityZone(availabilityZone);
+      }
+
+      /**
+       * @see org.jclouds.openstack.nova.v2_0.options.CreateServerOptions#getBlockDeviceMapping()
+       */
+      public static CreateServerOptions blockDeviceMapping (List<BlockDevice> blockDeviceMapping) {
+         CreateServerOptions options = new CreateServerOptions();
+         return options.blockDeviceMapping(blockDeviceMapping);
       }
    }
 
