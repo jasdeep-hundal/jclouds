@@ -110,14 +110,12 @@ public class QuotaApiExpectTest extends BaseNovaApiExpectTest {
             .metadataItems(128)
             .injectedFileContentBytes(10240)
             .injectedFiles(5)
-            .gigabytes(1000)
             .ram(51200)
             .floatingIps(10)
             .securityGroups(10)
             .securityGroupRules(20)
             .instances(10)
             .keyPairs(100)
-            .volumes(10)
             .cores(20)
             .id("demo").build();
    }

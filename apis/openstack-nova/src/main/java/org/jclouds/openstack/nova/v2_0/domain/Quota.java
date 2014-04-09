@@ -46,8 +46,6 @@ public class Quota {
       protected String id;
       protected int metadataItems;
       protected int injectedFileContentBytes;
-      protected int volumes;
-      protected int gigabytes;
       protected int ram;
       protected int floatingIps;
       protected int instances;
@@ -78,22 +76,6 @@ public class Quota {
        */
       public T injectedFileContentBytes(int injectedFileContentBytes) {
          this.injectedFileContentBytes = injectedFileContentBytes;
-         return self();
-      }
-
-      /** 
-       * @see Quota#getVolumes()
-       */
-      public T volumes(int volumes) {
-         this.volumes = volumes;
-         return self();
-      }
-
-      /** 
-       * @see Quota#getGigabytes()
-       */
-      public T gigabytes(int gigabytes) {
-         this.gigabytes = gigabytes;
          return self();
       }
 
@@ -162,7 +144,7 @@ public class Quota {
       }
 
       public Quota build() {
-         return new Quota(id, metadataItems, injectedFileContentBytes, volumes, gigabytes, ram, floatingIps, instances, injectedFiles, cores, securityGroups, securityGroupRules, keyPairs);
+         return new Quota(id, metadataItems, injectedFileContentBytes, ram, floatingIps, instances, injectedFiles, cores, securityGroups, securityGroupRules, keyPairs);
       }
       
       public T fromQuotas(Quota in) {
@@ -170,8 +152,6 @@ public class Quota {
                   .id(in.getId())
                   .metadataItems(in.getMetadatas())
                   .injectedFileContentBytes(in.getInjectedFileContentBytes())
-                  .volumes(in.getVolumes())
-                  .gigabytes(in.getGigabytes())
                   .ram(in.getRam())
                   .floatingIps(in.getFloatingIps())
                   .instances(in.getInstances())
@@ -195,8 +175,6 @@ public class Quota {
    private final int metadataItems;
    @Named("injected_file_content_bytes")
    private final int injectedFileContentBytes;
-   private final int volumes;
-   private final int gigabytes;
    private final int ram;
    @Named("floating_ips")
    private final int floatingIps;
@@ -212,14 +190,12 @@ public class Quota {
    private final int keyPairs;
 
    @ConstructorProperties({
-      "id", "metadata_items", "injected_file_content_bytes", "volumes", "gigabytes", "ram", "floating_ips", "instances", "injected_files", "cores", "security_groups", "security_group_rules", "key_pairs"
+      "id", "metadata_items", "injected_file_content_bytes", "ram", "floating_ips", "instances", "injected_files", "cores", "security_groups", "security_group_rules", "key_pairs"
    })
-   protected Quota(String id, int metadataItems, int injectedFileContentBytes, int volumes, int gigabytes, int ram, int floatingIps, int instances, int injectedFiles, int cores, int securityGroups, int securityGroupRules, int keyPairs) {
+   protected Quota(String id, int metadataItems, int injectedFileContentBytes, int ram, int floatingIps, int instances, int injectedFiles, int cores, int securityGroups, int securityGroupRules, int keyPairs) {
       this.id = checkNotNull(id, "id");
       this.metadataItems = metadataItems;
       this.injectedFileContentBytes = injectedFileContentBytes;
-      this.volumes = volumes;
-      this.gigabytes = gigabytes;
       this.ram = ram;
       this.floatingIps = floatingIps;
       this.instances = instances;
@@ -246,20 +222,6 @@ public class Quota {
 
    public int getInjectedFileContentBytes() {
       return this.injectedFileContentBytes;
-   }
-
-   /**
-    * The limit of the number of volumes that can be created for the tenant
-    */
-   public int getVolumes() {
-      return this.volumes;
-   }
-
-   /**
-    * The limit of the total size of all volumes for the tenant
-    */
-   public int getGigabytes() {
-      return this.gigabytes;
    }
 
    /**
@@ -320,7 +282,7 @@ public class Quota {
 
    @Override
    public int hashCode() {
-      return Objects.hashCode(id, metadataItems, injectedFileContentBytes, volumes, gigabytes, ram, floatingIps, instances, injectedFiles, cores, securityGroups, securityGroupRules, keyPairs);
+      return Objects.hashCode(id, metadataItems, injectedFileContentBytes, ram, floatingIps, instances, injectedFiles, cores, securityGroups, securityGroupRules, keyPairs);
    }
 
    @Override
@@ -331,8 +293,6 @@ public class Quota {
       return Objects.equal(this.id, that.id)
                && Objects.equal(this.metadataItems, that.metadataItems)
                && Objects.equal(this.injectedFileContentBytes, that.injectedFileContentBytes)
-               && Objects.equal(this.volumes, that.volumes)
-               && Objects.equal(this.gigabytes, that.gigabytes)
                && Objects.equal(this.ram, that.ram)
                && Objects.equal(this.floatingIps, that.floatingIps)
                && Objects.equal(this.instances, that.instances)
@@ -345,7 +305,7 @@ public class Quota {
    
    protected ToStringHelper string() {
       return Objects.toStringHelper(this)
-            .add("id", id).add("metadataItems", metadataItems).add("injectedFileContentBytes", injectedFileContentBytes).add("volumes", volumes).add("gigabytes", gigabytes).add("ram", ram).add("floatingIps", floatingIps).add("instances", instances).add("injectedFiles", injectedFiles).add("cores", cores).add("securityGroups", securityGroups).add("securityGroupRules", securityGroupRules).add("keyPairs", keyPairs);
+            .add("id", id).add("metadataItems", metadataItems).add("injectedFileContentBytes", injectedFileContentBytes).add("ram", ram).add("floatingIps", floatingIps).add("instances", instances).add("injectedFiles", injectedFiles).add("cores", cores).add("securityGroups", securityGroups).add("securityGroupRules", securityGroupRules).add("keyPairs", keyPairs);
    }
    
    @Override

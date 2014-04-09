@@ -71,7 +71,6 @@ public class QuotaApiLiveTest extends BaseNovaApiLiveTest {
                .instances(before.getInstances() - 1)
                .metadataItems(before.getMetadatas() - 1)
                .ram(before.getRam() - 1)
-               .volumes(before.getVolumes() - 1)
                .build();
 
          assertTrue(api.updateQuotaOfTenant(modified, tenant));
@@ -87,7 +86,6 @@ public class QuotaApiLiveTest extends BaseNovaApiLiveTest {
    protected void assertQuotasIsValid(Quota quota) {
       assertTrue(quota.getCores() > 0);
       assertTrue(quota.getFloatingIps() >= 0);
-      assertTrue(quota.getGigabytes() > 0);
       assertTrue(quota.getInjectedFileContentBytes() >= 0);
       assertTrue(quota.getInjectedFiles() >= 0);
       assertTrue(quota.getInstances() > 0);
@@ -95,6 +93,5 @@ public class QuotaApiLiveTest extends BaseNovaApiLiveTest {
       assertTrue(quota.getRam() > 0);
       assertTrue(quota.getSecurityGroups() > 0);
       assertTrue(quota.getSecurityGroupRules() > 0);
-      assertTrue(quota.getVolumes() > 0);
    }
 }
