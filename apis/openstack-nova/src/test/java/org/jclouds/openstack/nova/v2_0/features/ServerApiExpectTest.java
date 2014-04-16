@@ -38,6 +38,9 @@ import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSet;
+import java.util.Collections;
+import org.jclouds.openstack.nova.v2_0.options.CreateServerOptions.BlockDeviceMapping;
+import org.jclouds.openstack.nova.v2_0.parse.ParseServerDiagnostics;
 
 /**
  * Tests annotation parsing of {@code ServerApi}
@@ -196,6 +199,31 @@ public class ServerApiExpectTest extends BaseNovaApiExpectTest {
 
       assertEquals(apiWithNewServer.getServerApi("az-1.region-a.geo-1").create("test-e92", "1241",
                "100", new CreateServerOptions().networks("b3856ac0-f481-11e2-b778-0800200c9a66", "bf0f0f90-f481-11e2-b778-0800200c9a66")).toString(),
+              new ParseCreatedServerTest().expected().toString());
+   }
+
+   public void testCreateServerWithAttachedDiskWhenResponseIs202() throws Exception {
+
+      HttpRequest createServer = HttpRequest
+         .builder()
+         .method("POST")
+         .endpoint("https://az-1.region-a.geo-1.compute.hpcloudsvc.com/v1.1/3456/servers")
+         .addHeader("Accept", "application/json")
+         .addHeader("X-Auth-Token", authToken)
+         .payload(payloadFromStringWithContentType(
+                  "{\"server\":{\"name\":\"test-e92\",\"imageRef\":\"1241\",\"flavorRef\":\"100\",\"block_device_mapping\":[{\"volume_size\":\"\",\"volume_id\":\"f0c907a5-a26b-48ba-b803-83f6b7450ba5\",\"delete_on_termination\":\"1\",\"device_name\":\"vdb\"}]}}","application/json"))
+         .build();
+
+
+      HttpResponse createServerResponse = HttpResponse.builder().statusCode(202).message("HTTP/1.1 202 Accepted")
+         .payload(payloadFromResourceWithContentType("/new_server.json","application/json; charset=UTF-8")).build();
+
+
+      NovaApi apiWithNewServer = requestsSendResponses(keystoneAuthWithUsernameAndPasswordAndTenantName,
+            responseWithKeystoneAccess, createServer, createServerResponse);
+
+      assertEquals(apiWithNewServer.getServerApiForZone("az-1.region-a.geo-1").create("test-e92", "1241",
+               "100", new CreateServerOptions().blockDeviceMapping(Collections.singletonList(new BlockDeviceMapping().deleteOnTermination(true).volumeId("f0c907a5-a26b-48ba-b803-83f6b7450ba5").deviceName("vdb")))).toString(),
               new ParseCreatedServerTest().expected().toString());
    }
 
