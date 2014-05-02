@@ -28,6 +28,7 @@ import org.jclouds.openstack.keystone.v2_0.extensions.RoleAdminAsyncApi;
 import org.jclouds.openstack.keystone.v2_0.extensions.ServiceAdminAsyncApi;
 import org.jclouds.openstack.keystone.v2_0.extensions.TenantAdminAsyncApi;
 import org.jclouds.openstack.keystone.v2_0.extensions.UserAdminAsyncApi;
+import org.jclouds.openstack.keystone.v2_0.features.S3AsyncApi;
 import org.jclouds.openstack.keystone.v2_0.features.ServiceAsyncApi;
 import org.jclouds.openstack.keystone.v2_0.features.TenantAsyncApi;
 import org.jclouds.openstack.keystone.v2_0.features.TokenAsyncApi;
@@ -115,4 +116,10 @@ public interface KeystoneAsyncApi extends Closeable {
     */
    @Delegate
    Optional<? extends ServiceAdminAsyncApi> getServiceAdminApi();
+
+   /**
+    * @see KeystoneApi#getS3Api()
+    */
+   @Delegate
+   Optional<? extends S3AsyncApi> getS3Api();
 }

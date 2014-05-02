@@ -23,6 +23,7 @@ import org.jclouds.openstack.keystone.v2_0.extensions.RoleAdminApi;
 import org.jclouds.openstack.keystone.v2_0.extensions.ServiceAdminApi;
 import org.jclouds.openstack.keystone.v2_0.extensions.TenantAdminApi;
 import org.jclouds.openstack.keystone.v2_0.extensions.UserAdminApi;
+import org.jclouds.openstack.keystone.v2_0.features.S3Api;
 import org.jclouds.openstack.keystone.v2_0.features.ServiceApi;
 import org.jclouds.openstack.keystone.v2_0.features.TenantApi;
 import org.jclouds.openstack.keystone.v2_0.features.TokenApi;
@@ -102,4 +103,10 @@ public interface KeystoneApi extends Closeable {
     */
    @Delegate
    Optional<? extends ServiceAdminApi> getServiceAdminApi();
+
+   /** 
+    * Provides synchronous access to S3 features 
+    */
+   @Delegate
+   Optional<? extends S3Api> getS3Api();
 }

@@ -42,6 +42,8 @@ import org.jclouds.openstack.keystone.v2_0.extensions.TenantAdminApi;
 import org.jclouds.openstack.keystone.v2_0.extensions.TenantAdminAsyncApi;
 import org.jclouds.openstack.keystone.v2_0.extensions.UserAdminApi;
 import org.jclouds.openstack.keystone.v2_0.extensions.UserAdminAsyncApi;
+import org.jclouds.openstack.keystone.v2_0.features.S3Api;
+import org.jclouds.openstack.keystone.v2_0.features.S3AsyncApi;
 import org.jclouds.openstack.keystone.v2_0.features.ServiceApi;
 import org.jclouds.openstack.keystone.v2_0.features.ServiceAsyncApi;
 import org.jclouds.openstack.keystone.v2_0.features.TenantApi;
@@ -97,6 +99,7 @@ public class KeystoneRestClientModule<S extends KeystoneApi, A extends KeystoneA
             .put(TenantAdminApi.class, TenantAdminAsyncApi.class)
             .put(RoleAdminApi.class, RoleAdminAsyncApi.class)
             .put(ServiceAdminApi.class, ServiceAdminAsyncApi.class)
+            .put(S3Api.class, S3AsyncApi.class)
             .build();
 
    @SuppressWarnings("unchecked")
