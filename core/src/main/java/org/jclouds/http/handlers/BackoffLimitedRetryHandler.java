@@ -96,8 +96,17 @@ public class BackoffLimitedRetryHandler implements HttpRetryHandler, IOException
    }
 
    public boolean shouldRetryRequest(HttpCommand command, HttpResponse response) {
-      releasePayload(response);
-      return ifReplayableBackoffAndReturnTrue(command);
+      boolean shouldRetry = ifReplayableBackoffAndReturnTrue(command);
+      /* TODO:
+       * This is the *wrong* solution to BackoffLimitedRetryHandler releasing the payload when it shouldn't.
+       *   The client of this method should be responsible for cleaning up the response
+       *   because only it knows the context for the response. However, several different
+       *   clients use this method w/ current semantics, as well as a few RetryHandlers
+       *   that extend this one, so this is the convenient 4-line fix.
+       */
+      if (shouldRetry)
+         releasePayload(response);
+      return shouldRetry;
    }
 
    private boolean ifReplayableBackoffAndReturnTrue(HttpCommand command) {
