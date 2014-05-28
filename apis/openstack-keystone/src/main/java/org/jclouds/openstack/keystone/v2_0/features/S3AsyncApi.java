@@ -16,6 +16,7 @@
 package org.jclouds.openstack.keystone.v2_0.features;
 
 
+import com.google.common.collect.FluentIterable;
 import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -34,6 +35,10 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.SelectJson;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import javax.ws.rs.GET;
+import javax.ws.rs.PathParam;
+import org.jclouds.Fallbacks.EmptyFluentIterableOnNotFoundOr404;
+import org.jclouds.openstack.keystone.v2_0.domain.KeystoneAWSCredential;
 
 /**
  * Provides asynchronous access to the Keystone S3 authentication API via their REST API.
@@ -61,4 +66,13 @@ public interface S3AsyncApi {
    ListenableFuture<? extends Token> get(@PayloadParam("access") String access,
                                          @PayloadParam("token") String token,
                                          @PayloadParam("signature") String signature);
+
+   /** @see S3Api#getAWSCredsForUser(String) */
+   @Named("awsCreds:getAWSCredsForUser")
+   @GET
+   @Path("/users/{id}/credentials/OS-EC2")
+   @SelectJson("credentials")
+   @Consumes(MediaType.APPLICATION_JSON)
+   @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
+   ListenableFuture<? extends FluentIterable<? extends KeystoneAWSCredential>> getAWSCredsForUser(@PathParam("id") String id);
 }

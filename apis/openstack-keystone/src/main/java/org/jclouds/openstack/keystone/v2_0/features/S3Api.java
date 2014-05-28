@@ -18,6 +18,8 @@ package org.jclouds.openstack.keystone.v2_0.features;
 import org.jclouds.openstack.keystone.v2_0.domain.Token;
 
 import com.google.common.annotations.Beta;
+import com.google.common.collect.FluentIterable;
+import org.jclouds.openstack.keystone.v2_0.domain.KeystoneAWSCredential;
 
 /**
  * Provides synchronous access to the KeyStone S3 API.
@@ -38,4 +40,11 @@ public interface S3Api {
     * @return the requested information
     */
    Token get(String access, String token, String signature);
+
+   /**
+    * Get the set of AWS style credentials associated with the user whose id is supplied as the argument
+    *
+    * @return the requested information
+    */
+   FluentIterable<? extends KeystoneAWSCredential> getAWSCredsForUser(String id);
 }
