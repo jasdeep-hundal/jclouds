@@ -70,9 +70,10 @@ public interface S3AsyncApi {
    /** @see S3Api#getAWSCredsForUser(String) */
    @Named("awsCreds:getAWSCredsForUser")
    @GET
+   @Consumes(MediaType.APPLICATION_JSON)
    @Path("/users/{id}/credentials/OS-EC2")
    @SelectJson("credentials")
-   @Consumes(MediaType.APPLICATION_JSON)
+   @RequestFilters(AuthenticateRequest.class)
    @Fallback(EmptyFluentIterableOnNotFoundOr404.class)
    ListenableFuture<? extends FluentIterable<? extends KeystoneAWSCredential>> getAWSCredsForUser(@PathParam("id") String id);
 }
