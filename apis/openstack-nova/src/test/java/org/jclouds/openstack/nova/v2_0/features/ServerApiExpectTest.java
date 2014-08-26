@@ -207,7 +207,7 @@ public class ServerApiExpectTest extends BaseNovaApiExpectTest {
       HttpRequest createServer = HttpRequest
          .builder()
          .method("POST")
-         .endpoint("https://az-1.region-a.geo-1.compute.hpcloudsvc.com/v1.1/3456/servers")
+         .endpoint("https://az-1.region-a.geo-1.compute.hpcloudsvc.com/v2/3456/servers")
          .addHeader("Accept", "application/json")
          .addHeader("X-Auth-Token", authToken)
          .payload(payloadFromStringWithContentType(
@@ -222,7 +222,7 @@ public class ServerApiExpectTest extends BaseNovaApiExpectTest {
       NovaApi apiWithNewServer = requestsSendResponses(keystoneAuthWithUsernameAndPasswordAndTenantName,
             responseWithKeystoneAccess, createServer, createServerResponse);
 
-      assertEquals(apiWithNewServer.getServerApiForZone("az-1.region-a.geo-1").create("test-e92", "1241",
+      assertEquals(apiWithNewServer.getServerApi("az-1.region-a.geo-1").create("test-e92", "1241",
                "100", new CreateServerOptions().blockDeviceMapping(Collections.singletonList(new BlockDeviceMapping().deleteOnTermination(true).volumeId("f0c907a5-a26b-48ba-b803-83f6b7450ba5").deviceName("vdb")))).toString(),
               new ParseCreatedServerTest().expected().toString());
    }

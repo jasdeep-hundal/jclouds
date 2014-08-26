@@ -162,7 +162,7 @@ public class VolumeAttachmentApiLiveTest extends BaseNovaApiLiveTest {
             CreateServerOptions createServerOptions =
                CreateServerOptions.Builder.blockDeviceMapping(
                   Collections.singletonList(new BlockDeviceMapping().deviceName("/dev/vdf").volumeId(testVolume.getId())));
-            final String serverId = server_id = createServerInZone(zone, createServerOptions).getId();
+            final String serverId = server_id = createServerInRegion(region, createServerOptions).getId();
 
             Set<? extends VolumeAttachment> attachments = volumeAttachmentApi.get().listAttachmentsOnServer(serverId).toSet();
             assertNotNull(attachments);
@@ -196,7 +196,7 @@ public class VolumeAttachmentApiLiveTest extends BaseNovaApiLiveTest {
 
          } finally {
             if (server_id != null)
-               api.getServerApiForZone(zone).delete(server_id);
+               api.getServerApi(region).delete(server_id);
          }
       }
    }
