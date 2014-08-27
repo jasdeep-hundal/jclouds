@@ -26,6 +26,7 @@ import org.jclouds.openstack.nova.v2_0.NovaApi;
 import org.jclouds.openstack.nova.v2_0.domain.Server;
 import org.jclouds.openstack.nova.v2_0.internal.BaseNovaApiExpectTest;
 import org.jclouds.openstack.nova.v2_0.options.CreateServerOptions;
+import org.jclouds.openstack.nova.v2_0.options.CreateServerOptions.BlockDeviceMapping;
 import org.jclouds.openstack.nova.v2_0.options.RebuildServerOptions;
 import org.jclouds.openstack.nova.v2_0.parse.ParseCreatedServerTest;
 import org.jclouds.openstack.nova.v2_0.parse.ParseMetadataListTest;
@@ -38,9 +39,6 @@ import org.testng.annotations.Test;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSet;
-import java.util.Collections;
-import org.jclouds.openstack.nova.v2_0.options.CreateServerOptions.BlockDeviceMapping;
-import org.jclouds.openstack.nova.v2_0.parse.ParseServerDiagnostics;
 
 /**
  * Tests annotation parsing of {@code ServerApi}
@@ -223,7 +221,7 @@ public class ServerApiExpectTest extends BaseNovaApiExpectTest {
             responseWithKeystoneAccess, createServer, createServerResponse);
 
       assertEquals(apiWithNewServer.getServerApi("az-1.region-a.geo-1").create("test-e92", "1241",
-               "100", new CreateServerOptions().blockDeviceMapping(Collections.singletonList(new BlockDeviceMapping().deleteOnTermination(true).volumeId("f0c907a5-a26b-48ba-b803-83f6b7450ba5").deviceName("vdb")))).toString(),
+               "100", new CreateServerOptions().blockDeviceMapping(ImmutableSet.of(new BlockDeviceMapping().deleteOnTermination(true).volumeId("f0c907a5-a26b-48ba-b803-83f6b7450ba5").deviceName("vdb")))).toString(),
               new ParseCreatedServerTest().expected().toString());
    }
 

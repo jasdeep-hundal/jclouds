@@ -41,7 +41,6 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Objects;
 import com.google.common.collect.ForwardingObject;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
@@ -102,7 +101,6 @@ public class CreateServerOptions implements MapBinder {
    /**
     * A representation of block device that should be attached to the instance to be launched
     *
-    * @see  <a href="http://docs.openstack.org/trunk/openstack-ops/content/attach_block_storage.html">Attach Block Storage<a/>
     */
    public static class BlockDeviceMapping {
       @Named("volume_size")
@@ -156,7 +154,7 @@ public class CreateServerOptions implements MapBinder {
    private Set<Network> novaNetworks = ImmutableSet.of();
    private String availabilityZone;
    private boolean configDrive;
-   private List<BlockDeviceMapping> blockDeviceMapping = Lists.newArrayList();
+   private Set<BlockDeviceMapping> blockDeviceMapping = ImmutableSet.of();
 
    @Override
    public boolean equals(Object object) {
@@ -228,7 +226,7 @@ public class CreateServerOptions implements MapBinder {
       @Named("config_drive")
       String configDrive;
       @Named("block_device_mapping")
-      List<BlockDeviceMapping> blockDeviceMapping;
+      Set<BlockDeviceMapping> blockDeviceMapping;
 
       private ServerRequest(String name, String imageRef, String flavorRef) {
          this.name = name;
@@ -518,8 +516,8 @@ public class CreateServerOptions implements MapBinder {
    /**
     * @see #getBlockDeviceMapping
     */
-   public CreateServerOptions blockDeviceMapping(List<BlockDeviceMapping> blockDeviceMapping) {
-      this.blockDeviceMapping = ImmutableList.copyOf(blockDeviceMapping);
+   public CreateServerOptions blockDeviceMapping(Set<BlockDeviceMapping> blockDeviceMapping) {
+      this.blockDeviceMapping = ImmutableSet.copyOf(blockDeviceMapping);
       return this;
    }
 
@@ -528,7 +526,7 @@ public class CreateServerOptions implements MapBinder {
     *
     * @see  <a href="http://docs.openstack.org/trunk/openstack-ops/content/attach_block_storage.html">Attach Block Storage<a/>
     */
-   public List<BlockDeviceMapping> getBlockDeviceMapping() {
+   public Set<BlockDeviceMapping> getBlockDeviceMapping() {
       return blockDeviceMapping;
    }
 
@@ -622,7 +620,7 @@ public class CreateServerOptions implements MapBinder {
       /**
        * @see org.jclouds.openstack.nova.v2_0.options.CreateServerOptions#getBlockDeviceMapping()
        */
-      public static CreateServerOptions blockDeviceMapping (List<BlockDeviceMapping> blockDeviceMapping) {
+      public static CreateServerOptions blockDeviceMapping (Set<BlockDeviceMapping> blockDeviceMapping) {
          CreateServerOptions options = new CreateServerOptions();
          return options.blockDeviceMapping(blockDeviceMapping);
       }
