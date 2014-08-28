@@ -209,12 +209,12 @@ public class ServerApiExpectTest extends BaseNovaApiExpectTest {
          .addHeader("Accept", "application/json")
          .addHeader("X-Auth-Token", authToken)
          .payload(payloadFromStringWithContentType(
-                  "{\"server\":{\"name\":\"test-e92\",\"imageRef\":\"1241\",\"flavorRef\":\"100\",\"block_device_mapping\":[{\"volume_size\":\"\",\"volume_id\":\"f0c907a5-a26b-48ba-b803-83f6b7450ba5\",\"delete_on_termination\":\"1\",\"device_name\":\"vdb\"}]}}","application/json"))
+                  "{\"server\":{\"name\":\"test-e92\",\"imageRef\":\"1241\",\"flavorRef\":\"100\",\"block_device_mapping\":[{\"volume_size\":\"\",\"volume_id\":\"f0c907a5-a26b-48ba-b803-83f6b7450ba5\",\"delete_on_termination\":\"1\",\"device_name\":\"vdb\"}]}}", "application/json"))
          .build();
 
 
       HttpResponse createServerResponse = HttpResponse.builder().statusCode(202).message("HTTP/1.1 202 Accepted")
-         .payload(payloadFromResourceWithContentType("/new_server.json","application/json; charset=UTF-8")).build();
+         .payload(payloadFromResourceWithContentType("/new_server.json", "application/json; charset=UTF-8")).build();
 
 
       NovaApi apiWithNewServer = requestsSendResponses(keystoneAuthWithUsernameAndPasswordAndTenantName,
