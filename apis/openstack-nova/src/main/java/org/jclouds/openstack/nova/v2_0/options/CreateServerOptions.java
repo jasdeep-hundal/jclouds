@@ -16,8 +16,8 @@
  */
 package org.jclouds.openstack.nova.v2_0.options;
 
-import static com.google.common.base.Objects.equal;
 import static com.google.common.base.MoreObjects.toStringHelper;
+import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
@@ -33,6 +33,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.jclouds.http.HttpRequest;
+import org.jclouds.openstack.nova.v2_0.domain.BlockDeviceMapping;
 import org.jclouds.openstack.nova.v2_0.domain.Network;
 import org.jclouds.rest.MapBinder;
 import org.jclouds.rest.binders.BindToJsonPayload;
@@ -96,51 +97,6 @@ public class CreateServerOptions implements MapBinder {
          return toStringHelper("file").add("path", path).toString();
       }
 
-   }
-
-   /**
-    * A representation of block device that should be attached to the instance to be launched
-    *
-    */
-   public static class BlockDeviceMapping {
-      @Named("volume_size")
-      String volumeSize = "";
-      @Named("volume_id")
-      String volumeId = null;
-      @Named("delete_on_termination")
-      String deleteOnTermination = "0";
-      @Named("device_name")
-      String deviceName = null;
-
-      /**
-       * @param volumeId ID of the volume within the block store that you wish to attach
-       */
-      public BlockDeviceMapping volumeId(String volumeId){
-         this.volumeId = volumeId;
-         return this;
-      }
-
-      /**
-       * @param deleteOnTermination True if this volume should be deleted when the instance is terminated
-       */
-      public BlockDeviceMapping deleteOnTermination(boolean deleteOnTermination){
-         // Nova expects this to be a string
-         this.deleteOnTermination = deleteOnTermination ? "1" : "0";
-         return this;
-      }
-
-      /**
-       * Set the name of the device on which to mount this block volume.
-       *
-       * On instances launched through Nova, this cannot be 'vda' and usually
-       * starts with 'vdb'
-       *
-       * @param deviceName The name of the device on which the block volume should be mounted.
-       */
-      public BlockDeviceMapping deviceName(String deviceName){
-         this.deviceName = deviceName;
-         return this;
-      }
    }
 
    private String keyName;

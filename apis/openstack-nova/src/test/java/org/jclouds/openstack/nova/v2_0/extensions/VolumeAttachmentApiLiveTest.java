@@ -22,11 +22,12 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import java.util.Set;
+
+import org.jclouds.openstack.nova.v2_0.domain.BlockDeviceMapping;
 import org.jclouds.openstack.nova.v2_0.domain.Volume;
 import org.jclouds.openstack.nova.v2_0.domain.VolumeAttachment;
 import org.jclouds.openstack.nova.v2_0.internal.BaseNovaApiLiveTest;
 import org.jclouds.openstack.nova.v2_0.options.CreateServerOptions;
-import org.jclouds.openstack.nova.v2_0.options.CreateServerOptions.BlockDeviceMapping;
 import org.jclouds.openstack.nova.v2_0.options.CreateVolumeOptions;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -157,10 +158,10 @@ public class VolumeAttachmentApiLiveTest extends BaseNovaApiLiveTest {
    public void testAttachmentAtBoot() {
       if (volumeApi.isPresent()) {
          String server_id = null;
+         BlockDeviceMapping blockDeviceMapping = BlockDeviceMapping.createOptions(testVolume.getId(), "/dev/vdf").build();
          try {
             CreateServerOptions createServerOptions =
-               CreateServerOptions.Builder.blockDeviceMapping(
-                  ImmutableSet.of(new BlockDeviceMapping().deviceName("/dev/vdf").volumeId(testVolume.getId())));
+               CreateServerOptions.Builder.blockDeviceMapping(ImmutableSet.of(blockDeviceMapping));
             final String serverId = server_id = createServerInRegion(region, createServerOptions).getId();
 
             Set<? extends VolumeAttachment> attachments = volumeAttachmentApi.get()
